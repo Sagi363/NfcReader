@@ -20,67 +20,175 @@
     android:layout_weight="1"
     android:background="@color/niceColor" >
 
-<!--         android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"> -->
+    <ImageView
+        android:id="@+id/car_image"
+        android:layout_width="280dp"
+        android:layout_height="230dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:paddingRight="14dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/red" />
 
-        <ImageView
-            android:id="@+id/car_image"
-            android:layout_width="240dp"
-            android:layout_height="200dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:paddingRight="14dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/red" />
+    <TextView
+        android:id="@+id/car_number"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/car_image"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="47dp"
+        android:layout_marginLeft="71dp"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="88 123 77"
+        android:textColor="@color/black"
+        android:textSize="17sp" />
 
-        <TextView
-            android:id="@+id/car_number"
-            android:layout_width="120dp"
-            android:layout_height="45dp"
-            android:layout_alignLeft="@+id/car_image"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="37dp"
-            android:layout_marginLeft="51dp"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="88 123 77"
-            android:textSize="16sp"/>
+    <ImageView
+        android:id="@+id/day2"
+        android:layout_width="30dp"
+        android:layout_height="38dp"
+        android:layout_alignTop="@+id/day1"
+        android:layout_toLeftOf="@+id/day1"
+        android:scaleType="fitCenter"
+        android:src="@drawable/monday" />
 
-        <TextView
-            android:id="@+id/id"
-            android:layout_width="190dp"
-            android:layout_height="45dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="34dp"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="123"
-            android:textSize="24sp" />
+    <ImageView
+        android:id="@+id/day3"
+        android:layout_width="30dp"
+        android:layout_height="38dp"
+        android:layout_alignTop="@+id/day2"
+        android:layout_toLeftOf="@+id/day2"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tuesday" />
 
-        <TextView
-            android:id="@+id/unit_and_base"
-            android:layout_width="250dp"
-            android:layout_height="45dp"
-            
-            android:layout_below="@+id/id"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="123"
-            android:textSize="24sp" />
+    <ImageView
+        android:id="@+id/day4"
+        android:layout_width="30dp"
+        android:layout_height="38dp"
+        android:layout_alignTop="@+id/day3"
+        android:layout_toLeftOf="@+id/day3"
+        android:scaleType="fitCenter"
+        android:src="@drawable/wednesday" />
 
-        <TextView
-            android:id="@+id/presonal_number"
-            android:layout_width="190dp"
-            android:layout_height="45dp"
-            android:layout_above="@+id/id"
-            android:layout_alignLeft="@+id/id"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="123"
-            android:textSize="24sp" />
+    <ImageView
+        android:id="@+id/day5"
+        android:layout_width="30dp"
+        android:layout_height="38dp"
+        android:layout_alignTop="@+id/day4"
+        android:layout_toLeftOf="@+id/day4"
+        android:scaleType="fitCenter"
+        android:src="@drawable/thursday" />
+
+    <ImageView
+        android:id="@+id/day6"
+        android:layout_width="30dp"
+        android:layout_height="38dp"
+        android:layout_alignTop="@+id/day5"
+        android:layout_toLeftOf="@+id/day5"
+        android:scaleType="fitCenter"
+        android:src="@drawable/friday" />
+
+    <ImageView
+        android:id="@+id/day7"
+        android:layout_width="30dp"
+        android:layout_height="38dp"
+        android:layout_alignTop="@+id/day6"
+        android:layout_toLeftOf="@+id/day6"
+        android:scaleType="fitCenter"
+        android:src="@drawable/saturday" />
+
+    <ImageView
+        android:id="@+id/day1"
+        android:layout_width="30dp"
+        android:layout_height="38dp"
+        android:layout_alignRight="@+id/unit_and_base"
+        android:layout_below="@+id/unit_and_base"
+        android:layout_marginRight="52dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sunday" />
+
+    <TextView
+        android:id="@+id/car_type_and_color"
+        android:layout_width="190dp"
+        android:layout_height="43dp"
+        android:layout_above="@+id/car_image"
+        android:layout_alignLeft="@+id/car_image"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:paddingRight="14dp"
+        android:text="123"
+        android:textStyle="bold"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/presonal_number"
+        android:layout_width="190dp"
+        android:layout_height="38dp"
+        android:layout_above="@+id/car_image"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/car_type_and_color"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="123"
+        android:textStyle="bold"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/id"
+        android:layout_width="190dp"
+        android:layout_height="38dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/presonal_number"
+        android:layout_alignTop="@+id/car_image"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="123"
+        android:textStyle="bold"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/unit_and_base"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/id"
+        android:layout_toLeftOf="@+id/car_image"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="123"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/expiration_date"
+        android:layout_width="270dp"
+        android:layout_height="42dp"
+        android:layout_alignTop="@+id/car_number"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="123"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/v_or_x"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/car_number"
+        android:paddingLeft="18dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/v" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="245dp"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="25dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo" />
 
 </RelativeLayout>

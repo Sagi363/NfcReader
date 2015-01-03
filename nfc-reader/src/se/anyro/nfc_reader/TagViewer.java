@@ -17,12 +17,13 @@
 package se.anyro.nfc_reader;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +36,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import se.anyro.nfc_reader.record.ParsedNdefRecord;
@@ -58,6 +60,7 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * An {@link Activity} which handles a broadcast of a new tag that the device just discovered.
@@ -74,11 +77,13 @@ public class TagViewer extends Activity {
     private AlertDialog mDialog;
 
     private String id;
+    private String errorMsg = "";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tag_viewer);
+        
 //        mTagContent = (LinearLayout) findViewById(R.id.list);
         resolveIntent(getIntent());
 
@@ -165,9 +170,11 @@ public class TagViewer extends Activity {
 	  niceNumber += number.charAt(0);
 	  niceNumber += number.charAt(1);
 	  niceNumber += ' ';
+	  niceNumber += ' ';
 	  niceNumber += number.charAt(2);
 	  niceNumber += number.charAt(3);
 	  niceNumber += number.charAt(4);
+	  niceNumber += ' ';
 	  niceNumber += ' ';
 	  niceNumber += number.charAt(5);
 	  niceNumber += number.charAt(6);
@@ -192,44 +199,13 @@ public class TagViewer extends Activity {
           builder.append(line);
         }
         
-        JSONObject r = new JSONObject(builder.toString());
-        JSONArray authorizations  = r.getJSONArray("authorizations");
-        JSONObject authorization = authorizations.getJSONObject(0);
-        String rank = authorization.getString("rank");
-        String personal_id = authorization.getString("personal_id");
-        String unit = authorization.getString("unit");
-        String base = authorization.getString("base");
-        String firstname = authorization.getString("firstname");
-        String lastname = authorization.getString("lastname");
-        
-        JSONObject car  = authorization.getJSONObject("car");
-        String model = car.getString("model");
-        String color = car.getString("color");
-        String number = car.getString("number");
-        
-        ImageView carImage = (ImageView)findViewById(R.id.car_image);
-        
-        if (color.equals("אדום")) {
-        	carImage.setImageResource(R.drawable.red);
-        }
-        else {
-        	carImage.setImageResource(R.drawable.white);
-        }
-        
-        TextView carNumber = (TextView)findViewById(R.id.car_number);
-        carNumber.setText(giveMeNiceNumber(number));
-        
-        TextView pn = (TextView)findViewById(R.id.presonal_number);
-        pn.setText(personal_id);
-        
-        TextView name = (TextView)findViewById(R.id.id);
-        name.setText(rank + ' ' + firstname + ' ' + lastname);
-        
-        TextView unitAndBase = (TextView)findViewById(R.id.unit_and_base);
-        unitAndBase.setText(unit + " - " + base);
+        // :)
+        handleJSON(builder.toString());
       } else {
         Log.e("JSON", "Failed to download file");
       }
+    } catch (JSONException e) {
+    	this.errorMsg = "לא קיים אישור כניסה לכרטיס זה";
     } catch (ClientProtocolException e) {
       e.printStackTrace();
     } catch (Exception  e) {
@@ -238,6 +214,132 @@ public class TagViewer extends Activity {
     return builder.toString();
   } 
     
+  public void handleJSON(String json) throws JSONException, ParseException {
+	  JSONObject r = new JSONObject(json);
+      JSONArray authorizations  = r.getJSONArray("authorizations");
+      JSONObject authorization = authorizations.getJSONObject(0);
+      String rank = authorization.getString("rank");
+      String personal_id = authorization.getString("personal_id");
+      String unit = authorization.getString("unit");
+      String base = authorization.getString("base");
+      String firstname = authorization.getString("firstname");
+      String lastname = authorization.getString("lastname");
+      String expiration_date = authorization.getString("expiration_date");
+      
+      JSONObject car  = authorization.getJSONObject("car");
+      String model = car.getString("model");
+      String color = car.getString("color");
+      String number = car.getString("number");
+      
+      JSONArray entry_days  = authorization.getJSONArray("entry_days");
+      Boolean day1 = (Boolean) entry_days.get(0);
+      Boolean day2 = (Boolean) entry_days.get(1);
+      Boolean day3 = (Boolean) entry_days.get(2);
+      Boolean day4 = (Boolean) entry_days.get(3);
+      Boolean day5 = (Boolean) entry_days.get(4);
+      Boolean day6 = (Boolean) entry_days.get(5);
+      Boolean day7 = (Boolean) entry_days.get(6);
+      
+      setContentView(R.layout.info);
+      
+      if (!day1) {
+    	  ImageView dayImage = (ImageView)findViewById(R.id.day1);
+    	  dayImage.setImageResource(R.drawable.empty_day);
+      }
+      if (!day2) {
+    	  ImageView dayImage = (ImageView)findViewById(R.id.day2);
+    	  dayImage.setImageResource(R.drawable.empty_day);
+      }
+      if (!day3) {
+    	  ImageView dayImage = (ImageView)findViewById(R.id.day3);
+    	  dayImage.setImageResource(R.drawable.empty_day);
+      }
+      if (!day4) {
+    	  ImageView dayImage = (ImageView)findViewById(R.id.day4);
+    	  dayImage.setImageResource(R.drawable.empty_day);
+      }
+      if (!day5) {
+    	  ImageView dayImage = (ImageView)findViewById(R.id.day5);
+    	  dayImage.setImageResource(R.drawable.empty_day);
+      }
+      if (!day6) {
+    	  ImageView dayImage = (ImageView)findViewById(R.id.day6);
+    	  dayImage.setImageResource(R.drawable.empty_day);
+      }
+      if (!day7) {
+    	  ImageView dayImage = (ImageView)findViewById(R.id.day7);
+    	  dayImage.setImageResource(R.drawable.empty_day);
+      }
+      
+      ImageView carImage = (ImageView)findViewById(R.id.car_image);
+      
+      if (color.equals("אדום")) {
+      		carImage.setImageResource(R.drawable.red);
+      }
+      else if (color.equals("לבן")){
+      		carImage.setImageResource(R.drawable.white);
+      }
+      else if (color.equals("שחור")){
+        	carImage.setImageResource(R.drawable.black);
+      }
+      else if (color.equals("כחול")){
+        	carImage.setImageResource(R.drawable.blue);
+      }
+      else if (color.equals("ירוק")){
+        	carImage.setImageResource(R.drawable.green);
+      }
+      else if (color.equals("צהוב")){
+        	carImage.setImageResource(R.drawable.yellow);
+      }
+      else if (color.equals("תכלת")){
+      		carImage.setImageResource(R.drawable.azure);
+      }
+      else {
+    	 	carImage.setImageResource(R.drawable.gray);
+      }
+      
+      TextView carNumber = (TextView)findViewById(R.id.car_number);
+      carNumber.setText(giveMeNiceNumber(number));
+      
+      TextView pn = (TextView)findViewById(R.id.presonal_number);
+      pn.setText(personal_id);
+      
+      TextView name = (TextView)findViewById(R.id.id);
+      name.setText(rank + ' ' + firstname + ' ' + lastname);
+      
+      TextView unitAndBase = (TextView)findViewById(R.id.unit_and_base);
+      unitAndBase.setText(unit + " - " + base);
+      
+      TextView carTypeAndColor = (TextView)findViewById(R.id.car_type_and_color);
+      carTypeAndColor.setText(model + " - " + color);
+       												 //2016-01-01T01:01:00.201Z
+      SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");  
+      String date = "s";
+      Date exDate = null;
+      
+      try {  
+          exDate = format.parse(expiration_date);   
+          DateFormat df = new SimpleDateFormat("dd/MM/yy");
+          date = df.format(exDate);
+      } catch (Exception e) {  
+          // TODO Auto-generated catch block  
+          e.printStackTrace();  
+      }
+      
+      TextView expirationDate = (TextView)findViewById(R.id.expiration_date);
+      expirationDate.setText("בתוקף עד: " + date);
+      
+//      String strToday = Calendar.getInstance().getTime();
+//      Date today = format.parse(strToday);
+      Date today = Calendar.getInstance().getTime();
+      
+      // Change the v to x
+      if (exDate.before(today)) {
+    	  ImageView vOrX = (ImageView)findViewById(R.id.v_or_x);
+    	  vOrX.setImageResource(R.drawable.x);
+      }
+  }
+  
     private void resolveIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -261,15 +363,14 @@ public class TagViewer extends Activity {
 //                msgs = new NdefMessage[] { msg };
                 
                 String strId = dumpTagData(tag);
+                this.id = strId;
                 
-                setContentView(R.layout.info);
-                
-                if (strId.equals("18535820")) {
-                	this.id = "12345678";
-                }
-                else {
-                	this.id = strId;
-                }
+//                if (strId.equals("18535820")) {
+//                	this.id = "12345678";
+//                }
+//                else {
+//                	this.id = strId;
+//                }
                 
                 StrictMode.ThreadPolicy policy = new StrictMode.
         	    ThreadPolicy.Builder().permitAll().build();
@@ -281,7 +382,11 @@ public class TagViewer extends Activity {
                     Log.i("JSON", json.toString());
                   }
                 catch (Exception e) {
-                  e.printStackTrace();
+                	this.errorMsg = "בעיה בגישה לשרת";
+                }
+                
+                if (!this.errorMsg.isEmpty()) {
+                	Toast.makeText(getApplicationContext(), this.errorMsg, Toast.LENGTH_LONG).show();
                 }
             }
             // Setup the views
